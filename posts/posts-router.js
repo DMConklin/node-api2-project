@@ -66,9 +66,8 @@ router.post('/api/posts', (req,res) => {
     }
 
     posts.insert(req.body)
-        .then(id => {
-            console.log(id)
-            return posts.findById(id)
+        .then(post => {
+            return posts.findById(post.id)
         })
         .then(post => {
             res.status(201).json(post)
@@ -76,7 +75,7 @@ router.post('/api/posts', (req,res) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({
-                message: "There was an error posting your post"
+                message: "There was an error while saving the post to the database"
             })
         })
 })
@@ -90,15 +89,14 @@ router.post('/api/posts/:id/comments', (req,res) => {
                 })
             } else if (!req.body.text) {
                 res.status(400).json({
-                    message: "Please provide text for the comment"
+                    message: "Please provide text for the comment."
                 })
             } else {
                 return posts.insertComment(req.body)
             }
         })
-        .then(id => {
-            console.log(id)
-            return posts.findCommentById(id)
+        .then(comment => {
+            return posts.findCommentById(comment.id)
         })
         .then(comment => {
             res.status(201).json(comment)
@@ -116,7 +114,7 @@ router.delete('/api/posts/:id', (req,res) => {
         .then(success => {
             if (!success) {
                 return res.status(404).json({
-                    message: "The post with the specified ID doesn not exist"
+                    message: "The post with the specified ID doesn't not exist."
                 })
             }
             res.json({
