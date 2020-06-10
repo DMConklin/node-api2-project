@@ -60,24 +60,24 @@ router.get('/api/posts/:id/comments', (req,res) => {
 
 router.post('/api/posts', (req,res) => {
     if (!req.body.title || !req.body.contents) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "Please provide title and contents for the post."
         })
-    }
-
-    posts.insert(req.body)
-        .then(post => {
-            return posts.findById(post.id)
-        })
-        .then(post => {
-            res.status(201).json(post)
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({
-                message: "There was an error while saving the post to the database"
+    } else {
+        posts.insert(req.body)
+            .then(post => {
+                return posts.findById(post.id)
             })
-        })
+            .then(post => {
+                res.status(201).json(post)
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({
+                    message: "There was an error while saving the post to the database"
+                })
+            })
+    }
 })
 
 router.post('/api/posts/:id/comments', (req,res) => {
