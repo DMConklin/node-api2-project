@@ -92,7 +92,7 @@ router.post('/api/posts/:id/comments', (req,res) => {
                     message: "Please provide text for the comment."
                 })
             } else {
-                return posts.insertComment(req.body)
+                return posts.insertComment({...req.body, post_id: req.query.post_id})
             }
         })
         .then(comment => {
